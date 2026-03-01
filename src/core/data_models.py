@@ -3,6 +3,18 @@ from typing import Dict, Any, List, Optional
 from pydantic import BaseModel, Field
 
 
+class ExplainabilityPacket(BaseModel):
+    """
+    XAI (Explainable AI) Packet.
+    Contains breakdown of why a certain decision was made.
+    """
+
+    primary_factor: str
+    contributions: Dict[str, float]
+    logic_path: List[str]
+    model_certainty: float
+
+
 class SignalData(BaseModel):
     """
     Signal Data Model.
@@ -29,6 +41,9 @@ class RiskReport(BaseModel):
     status: str
     reason: str
     suggested_multiplier: float = 1.0
+    attributions: Dict[str, float] = Field(
+        default_factory=dict, description="Factor weights in risk decision"
+    )
     timestamp: datetime = Field(default_factory=datetime.now)
 
 
@@ -44,4 +59,5 @@ class TradeDecision(BaseModel):
     risk: RiskReport
     weight: float
     reason: str
+    explanation: Optional[ExplainabilityPacket] = None
     timestamp: datetime = Field(default_factory=datetime.now)

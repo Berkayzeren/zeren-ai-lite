@@ -1,6 +1,5 @@
 import logging
-import random
-from typing import Dict, Any, List
+from typing import Dict, Any
 from datetime import datetime, timedelta
 
 logger = logging.getLogger("ZerenAI.Strategy.SignalGenerator")

@@ -7,7 +7,12 @@ from src.core.module_base import AIModule
 from src.core.event_bus import EventBus
 from src.core.journal import Journal
 from src.core.monitoring import Monitoring
-from src.core.data_models import SignalData, RiskReport, TradeDecision
+from src.core.data_models import (
+    SignalData,
+    RiskReport,
+    TradeDecision,
+    ExplainabilityPacket,
+)
 
 # Strategy Imports
 from src.strategy.risk_manager import RiskManager
@@ -114,11 +119,18 @@ class ZerenEngine(AIModule):
                 selected_ticker, sim_data["volatility"] * 10
             )
 
+            # XAI: Risk Attribution (Which layer dominated?)
+            risk_attributions = {
+                "rule_based": 0.4 if rule_check["is_valid"] else 1.0,
+                "neural_anomaly": neural_check["anomaly_score"] / 2.0,
+            }
+
             risk_report = RiskReport(
                 is_valid=rule_check["is_valid"],
                 risk_level=neural_check["level"],
                 status=neural_check["status"],
                 reason=rule_check["reason"],
+                attributions=risk_attributions,
             )
 
             # --- 4. PORTFOLIO OPTIMIZATION ---
@@ -131,6 +143,30 @@ class ZerenEngine(AIModule):
             # --- 5. DECISION AND JOURNALING ---
             decision = "REJECT"
             final_reason = "Risk/Sector Constraint"
+
+            # XAI: Build explainability packet
+            logic_steps = [
+                "Sentiment Checked",
+                "Signals Generated",
+                "Hybrid Risk Evaluated",
+            ]
+            if final_weight > 0:
+                logic_steps.append("Portfolio Balanced")
+
+            xai_packet = ExplainabilityPacket(
+                primary_factor="Signal Confidence"
+                if sig_obj.confidence > 0.7
+                else "Risk Mitigation",
+                contributions={
+                    "sentiment": sentiment_mult,
+                    "signal": sig_obj.confidence,
+                    "risk": 1.0 - (risk_report.risk_level / 4.0),
+                },
+                logic_path=logic_steps,
+                model_certainty=round(
+                    sig_obj.confidence * (1.0 - neural_check["anomaly_score"] * 0.2), 4
+                ),
+            )
 
             if risk_report.is_valid and risk_report.risk_level < 3 and final_weight > 0:
                 decision = "EXECUTE"
@@ -148,6 +184,7 @@ class ZerenEngine(AIModule):
                 risk=risk_report,
                 weight=final_weight,
                 reason=final_reason,
+                explanation=xai_packet,
             )
 
             # JOURNALING
@@ -157,6 +194,9 @@ class ZerenEngine(AIModule):
             print(f"🛡️ Risk: Rules={risk_report.reason} | Neural={risk_report.status}")
             print(
                 f"📊 Decision: {decision} (%{final_weight * 100:.2f}) - Reason: {final_reason}"
+            )
+            print(
+                f"🧠 XAI: Primary Factor: {xai_packet.primary_factor} | Certainty: {xai_packet.model_certainty * 100:.1f}%"
             )
 
             await asyncio.sleep(4)
