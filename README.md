@@ -1,32 +1,65 @@
 # Zeren AI Lite
 
-Zeren AI Lite, ticari amaçlı geliştirilen ana **Zeren AI** projesinin açık kaynaklı, hafifletilmiş (lite) bir versiyonudur. Bu depo, projenin mimari yapısını, temel prensiplerini ve kodlama standartlarını iş arama süreçlerinde sergilemek amacıyla oluşturulmuştur.
+Zeren AI Lite, ticari amaçlı geliştirilen ana **Zeren AI** projesinin açık kaynaklı, profesyonel mimari ve mühendislik pratiklerini sergileyen hafifletilmiş (lite) versiyonudur.
 
 > [!IMPORTANT]
-> **Not:** Bu depo, projenin sadece temel iskeletini ve halka açık paylaşılabilecek kısımlarını içerir. Algoritmik ticaret stratejilerinin tamamı, tescilli modeller ve veri setleri gizlilik nedeniyle ana projede tutulmaktadır.
+> **Not:** Bu depo, projenin sadece temel iskeletini, asenkron iletişim altyapısını ve risk yönetimi mantığını içerir. Tescilli algoritmalar, derin öğrenme modelleri ve veri setleri gizlilik nedeniyle ana projede tutulmaktadır.
 
-## 🚀 Proje Hakkında
-Zeren AI, borsa ve kripto paralar üzerinde derin öğrenme ve takviyeli öğrenme (Reinforcement Learning) tabanlı otonom bir ticaret motorudur. Lite versiyonu şu temel özellikleri barındırır:
+## 🌟 Öne Çıkan Özellikler
 
-- **Modüler Mimari:** `AIModule` tabanlı asenkron yapı.
-- **Risk Yönetimi:** Kelly Kriteri ve `Neural Risk Guard` mantığının temel implementasyonları.
-- **Modern UI:** Next.js ve Shadcn UI kullanılarak tasarlanmış dashboard taslakları.
-- **Evrensel Dil Desteği (i18n):** Türkçe ve İngilizce tam senkronize altyapı.
+- **Modüler Asenkron Mimari:** `AIModule` tabanlı, genişletilebilir ve sağlam bir servis yapısı.
+- **Event-Driven Haberleşme:** Modüller arası düşük bağımlılık (loose coupling) sağlayan merkezi `EventBus` sistemi.
+- **Çok Katmanlı Risk Yönetimi:**
+    - **Kelly Kriteri:** Matematiksel optimal pozisyon boyutlandırma.
+    - **Neural Risk Guard:** Simüle edilmiş anomali tespiti ve hibrit risk değerlendirmesi.
+    - **Sektörel Optimizasyon:** Portföy çeşitlendirmesi ve sektör yoğunlaşma kontrolleri.
+- **Sinyal Üretim Motoru:** Teknik analiz (RSI, MACD) ve Scalp/Swing strateji simülasyonları.
+- **Mühendislik Standartları:**
+    - **Unit Tests:** `pytest` ile %100 kapsanan kritik modüller.
+    - **CI/CD:** GitHub Actions ile otomatik test entegrasyonu.
+    - **i18n:** TR/EN tam senkronize dil desteği.
 
-## 🛠️ Mimari Standartlar
-Zeren AI geliştirme süreçlerinde şu prensipler kırmızı çizgidir:
-1. **Tip Güvenliği:** Python'da Pydantic ve Type Hints, frontend'de TypeScript kullanımı zorunludur.
-2. **Asenkron Operasyon:** Tüm I/O işlemleri `async/await` ile yönetilir.
-3. **Dokümantasyon:** Tüm kodlar Google-style docstring'ler ile belgelenmiştir.
+## 🏗️ Mimari Yapı
+
+```mermaid
+graph TD
+    Data[Market Verisi] --> Engine[Zeren Engine]
+    Engine --> Bus[Event Bus]
+    Bus --> Sig[Signal Generator]
+    Sig --> Risk[Risk Manager]
+    Risk --> Neural[Neural Risk Guard]
+    Neural --> Opt[Portfolio Optimizer]
+    Opt --> Trade[Trade Execution]
+    Trade --> Bus
+```
 
 ## 📂 Dosya Yapısı
-- `src/core/`: Sistemin kalbi, temel modül sınıfları.
-- `src/strategy/`: Risk yönetimi ve sinyal üretim mantığı.
-- `dashboard/`: Kullanıcı arayüzü bileşenleri.
-- `docs/`: Mimari ve kullanım dokümanları.
+
+- `src/core/`: EventBus, temel modül sınıfları ve sistem çekirdeği.
+- `src/strategy/`: Risk yönetimi, sinyal üretimi ve portföy optimizasyonu.
+- `tests/`: Sistem güvenilirliğini sağlayan birim testleri.
+- `.github/workflows/`: Otomatik test ve dağıtım süreçleri.
+
+## 🚀 Başlangıç
+
+### Gereksinimler
+- Python 3.9+
+- `pip install .` (Temel bağımlılıklar için)
+- `pip install ".[test]"` (Testleri çalıştırmak için)
+
+### Çalıştırma
+Sistemi simülasyon modunda başlatmak için:
+```bash
+python3 main.py
+```
+
+### Testleri Çalıştırma
+```bash
+pytest tests/
+```
 
 ## ⚠️ Yasal Uyarı
-Bu proje eğitim ve portfolyo amaçlıdır. **YATIRIM TAVSİYESİ DEĞİLDİR.** Finansal piyasalarda işlem yapmak yüksek risk içerir.
+Bu proje eğitim ve portfolyo amaçlıdır. **YATIRIM TAVSİYESİ DEĞİLDİR.** Finansal piyasalar yüksek risk içerir.
 
 ---
 *© 2026 Zeren AI - Advanced Agentic Coding Team*
