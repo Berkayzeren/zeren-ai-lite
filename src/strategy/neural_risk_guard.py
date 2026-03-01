@@ -1,5 +1,5 @@
 import logging
-import asyncio
+import random
 from typing import Dict, Any
 from datetime import datetime
 
@@ -8,8 +8,8 @@ logger = logging.getLogger("ZerenAI.Strategy.NeuralRiskGuard")
 
 class NeuralRiskGuard:
     """
-    Lite Sinirsel Risk Muhafızı (Simülasyon).
-    Kural tabanlı risk yönetimini, anomali tespiti simülasyonu ile birleştirir.
+    Lite Neural Risk Guard (Simulation).
+    Combines rule-based risk management with neural anomaly detection simulation.
     """
 
     def __init__(self):
@@ -19,13 +19,13 @@ class NeuralRiskGuard:
         self, ticker: str, technical_risk: float
     ) -> Dict[str, Any]:
         """
-        Hibrit Risk Değerlendirmesi.
-        Teknik verilerle "Neural Anomaly" simülasyonunu birleştirir.
+        Hybrid Risk Evaluation.
+        Combines technical data with "Neural Anomaly" simulation.
         """
-        # Anomali tespiti simülasyonu (Gerçek projede PyTorch/TF modelleri çalışır)
-        anomaly_score = random.uniform(0, 1) if "random" in globals() else 0.2
+        # Simulated anomaly detection
+        anomaly_score = random.uniform(0, 1)
 
-        # Risk seviyesi belirleme mantığı
+        # Risk level determination logic
         if technical_risk > 0.8 or anomaly_score > 0.9:
             level = 4  # CRISIS
         elif technical_risk > 0.6 or anomaly_score > 0.7:
@@ -43,7 +43,3 @@ class NeuralRiskGuard:
             "timestamp": datetime.now().isoformat(),
             "action": "HALT" if level >= 4 else "MONITOR" if level >= 2 else "EXECUTE",
         }
-
-
-# Random modülünü içeri alalım
-import random

@@ -1,22 +1,29 @@
 # Zeren AI Lite (Advanced Portfolio Edition)
 
-Zeren AI Lite, ticari **Zeren AI** ekosisteminin en yüksek standartlarını (Architecture & Auditability) temsil eden, portfolyo amaçlı geliştirilmiş ileri seviye bir versiyonudur.
+Zeren AI Lite is an open-source, lightweight version of the commercial **Zeren AI** project, designed to showcase advanced architectural patterns and autonomous engineering practices.
 
-## 🚀 Ultra-Lite Mimari & Özellikler
+> [!IMPORTANT]
+> **Note:** This repository contains the core architectural skeleton, asynchronous communication infrastructure, and risk management logic. Proprietary trading algorithms, deep learning models, and datasets are kept private.
 
-Bu versiyon, bir ticaret botundan öte, **asenkron otonom bir sistem** olarak tasarlanmıştır:
+## 🌟 Key Features
 
-- **Auditability (Denetlenebilirlik):** `Journal` modülü ile her karar (Sinyal, Risk, Duygu durumu) `logs/` dizininde kalıcı JSON olarak saklanır.
-- **System Monitoring (Nabız):** `Monitoring` modülü sayesinde sistemin hayatta olup olmadığı ve gecikme süreleri anlık izlenir (`temp/heartbeats`).
-- **Pydantic Data Governance:** Tüm modüller arası veri akışı (`SignalData`, `RiskReport`, `TradeDecision`) katı tip güvenliği ile standardize edilmiştir.
-- **Sentiment Analysis Focus:** Haber akışı ve sosyal medya duyarlılığı (`SentimentAnalyzer`), kararları etkileyen ana katmanlardan biri olarak entegre edilmiştir.
-- **Hybrid Risk Protection:** Kural tabanlı risk denetimine ek olarak simüle edilmiş neural anomali tespiti (`NeuralRiskGuard`) eşlik eder.
+Zeren AI Lite is designed not just as a trading bot, but as a fully **asynchronous autonomous system**:
 
-## 🏗️ Genişletilmiş Mimari Akış
+- **Auditability:** The `Journal` module ensures every decision (Signal, Risk, Sentiment) is permanently stored as structured JSON in the `logs/` directory.
+- **System Monitoring (Heartbeat):** The `Monitoring` module tracks the health and latency of all sub-components in real-time.
+- **Data Governance:** Standardized data flow using **Pydantic** models (`SignalData`, `RiskReport`, `TradeDecision`) for strict type safety.
+- **Sentiment-Driven Decisions:** Integrated news and social media sentiment analysis (`SentimentAnalyzer`) as a critical decision layer.
+- **Hybrid Risk Protection:** Combines rule-based safety checks with simulated neural anomaly detection (`NeuralRiskGuard`).
+- **Event-Driven Architecture:** Uses a central `EventBus` for decoupled communication between services.
+
+## 🏗️ Architectural Flow
+
+The autonomous decision cycle follows this path:
+**Market Data** -> **Sentiment Analysis** -> **Signal Generation** -> **Hybrid Risk Check** -> **Portfolio Optimization** -> **Final Standardized Decision** -> **Journaling & Event-Bus Execution**.
 
 ```mermaid
 graph TD
-    Data[Market Verisi] --> Sent[Sentiment Analysis]
+    Data[Market Data] --> Sent[Sentiment Analysis]
     Sent --> Sig[Signal Engine]
     Sig --> Risk[Hybrid Risk Guard]
     Risk --> Opt[Portfolio Optimizer]
@@ -27,24 +34,24 @@ graph TD
     Exec --> Heart[Heartbeat/Monitoring]
 ```
 
-## 📂 Teknik Dosya Yapısı
+## 📂 Technical Structure
 
-- `src/core/`: 
-    - `data_models.py`: Pydantic şemaları.
-    - `journal.py`: Karar günlüğü.
-    - `monitoring.py`: Sistem sağlığı (Heartbeat).
-    - `event_bus.py`: Asenkron haberleşme.
-- `src/strategy/`: 
-    - `sentiment_analyzer.py`: Haber duyarlılık motoru.
-    - `risk_manager.py`: Kelly ve volatilite kontrolü.
-    - `neural_risk_guard.py`: Hibrit risk katmanı.
-- `logs/`: Karar kayıtlarının tutulduğu dizin.
+- `src/core/`:
+    - `data_models.py`: Pydantic schemas for standardization.
+    - `journal.py`: Decision audit trail.
+    - `monitoring.py`: System health (Heartbeat).
+    - `event_bus.py`: Async Pub/Sub communication.
+- `src/strategy/`:
+    - `sentiment_analyzer.py`: News sentiment simulation.
+    - `risk_manager.py`: Kelly Criterion & Volatility management.
+    - `neural_risk_guard.py`: Hybrid anomaly detection.
+- `logs/`: Directory for persistent decision journals.
 
-## 🛠️ Kurulum ve Çalıştırma
+## 🛠️ Getting Started
 
-1. **Bağımlılıklar:** `pip install -r requirements.txt` (Pydantic ve Pytest gereklidir).
-2. **Başlat:** `python3 main.py`
-3. **İzle:** `logs/` klasöründeki JSON dosyalarını inceleyerek sistemin neden karar verdiğini denetleyin.
+1. **Install Dependencies:** `pip install -r requirements.txt` (Pydantic and Pytest required).
+2. **Launch:** `python3 main.py`
+3. **Verify:** Check the `logs/` directory to see the "recorded thoughts" of the system.
 
 ---
-*© 2026 Zeren AI - Otonom Mühendislik Manifestosu*
+*© 2026 Zeren AI - Autonomous Engineering Manifesto*

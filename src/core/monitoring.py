@@ -34,13 +34,19 @@ class Monitoring:
             logger.warning(f"Heartbeat gönderilemedi ({component_name}): {e}")
 
     def get_system_status(self) -> dict:
-        """Tüm bileşenlerin durumunu kontrol eder."""
+        """Checks the status of all components."""
         report = {}
+        if not os.path.exists(self.heartbeat_dir):
+            return report
+
         for file in os.listdir(self.heartbeat_dir):
             if file.endswith(".json"):
                 comp_name = file.replace(".json", "")
-                with open(os.path.join(self.heartbeat_dir, file), "r") as f:
-                    data = json.load(f)
-                    latency = time.time() - data["ts"]
-                    report[comp_name] = "OK" if latency < 60 else "DEAD"
+                try:
+                    with open(os.path.join(self.heartbeat_dir, file), "r") as f:
+                        data = json.load(f)
+                        latency = time.time() - data.get("ts", 0)
+                        report[comp_name] = "OK" if latency < 60 else "DEAD"
+                except Exception:
+                    report[comp_name] = "UNKNOWN"
         return report
