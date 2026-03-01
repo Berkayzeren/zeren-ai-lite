@@ -1,65 +1,50 @@
-# Zeren AI Lite
+# Zeren AI Lite (Advanced Portfolio Edition)
 
-Zeren AI Lite, ticari amaçlı geliştirilen ana **Zeren AI** projesinin açık kaynaklı, profesyonel mimari ve mühendislik pratiklerini sergileyen hafifletilmiş (lite) versiyonudur.
+Zeren AI Lite, ticari **Zeren AI** ekosisteminin en yüksek standartlarını (Architecture & Auditability) temsil eden, portfolyo amaçlı geliştirilmiş ileri seviye bir versiyonudur.
 
-> [!IMPORTANT]
-> **Not:** Bu depo, projenin sadece temel iskeletini, asenkron iletişim altyapısını ve risk yönetimi mantığını içerir. Tescilli algoritmalar, derin öğrenme modelleri ve veri setleri gizlilik nedeniyle ana projede tutulmaktadır.
+## 🚀 Ultra-Lite Mimari & Özellikler
 
-## 🌟 Öne Çıkan Özellikler
+Bu versiyon, bir ticaret botundan öte, **asenkron otonom bir sistem** olarak tasarlanmıştır:
 
-- **Modüler Asenkron Mimari:** `AIModule` tabanlı, genişletilebilir ve sağlam bir servis yapısı.
-- **Event-Driven Haberleşme:** Modüller arası düşük bağımlılık (loose coupling) sağlayan merkezi `EventBus` sistemi.
-- **Çok Katmanlı Risk Yönetimi:**
-    - **Kelly Kriteri:** Matematiksel optimal pozisyon boyutlandırma.
-    - **Neural Risk Guard:** Simüle edilmiş anomali tespiti ve hibrit risk değerlendirmesi.
-    - **Sektörel Optimizasyon:** Portföy çeşitlendirmesi ve sektör yoğunlaşma kontrolleri.
-- **Sinyal Üretim Motoru:** Teknik analiz (RSI, MACD) ve Scalp/Swing strateji simülasyonları.
-- **Mühendislik Standartları:**
-    - **Unit Tests:** `pytest` ile %100 kapsanan kritik modüller.
-    - **CI/CD:** GitHub Actions ile otomatik test entegrasyonu.
-    - **i18n:** TR/EN tam senkronize dil desteği.
+- **Auditability (Denetlenebilirlik):** `Journal` modülü ile her karar (Sinyal, Risk, Duygu durumu) `logs/` dizininde kalıcı JSON olarak saklanır.
+- **System Monitoring (Nabız):** `Monitoring` modülü sayesinde sistemin hayatta olup olmadığı ve gecikme süreleri anlık izlenir (`temp/heartbeats`).
+- **Pydantic Data Governance:** Tüm modüller arası veri akışı (`SignalData`, `RiskReport`, `TradeDecision`) katı tip güvenliği ile standardize edilmiştir.
+- **Sentiment Analysis Focus:** Haber akışı ve sosyal medya duyarlılığı (`SentimentAnalyzer`), kararları etkileyen ana katmanlardan biri olarak entegre edilmiştir.
+- **Hybrid Risk Protection:** Kural tabanlı risk denetimine ek olarak simüle edilmiş neural anomali tespiti (`NeuralRiskGuard`) eşlik eder.
 
-## 🏗️ Mimari Yapı
+## 🏗️ Genişletilmiş Mimari Akış
 
 ```mermaid
 graph TD
-    Data[Market Verisi] --> Engine[Zeren Engine]
-    Engine --> Bus[Event Bus]
-    Bus --> Sig[Signal Generator]
-    Sig --> Risk[Risk Manager]
-    Risk --> Neural[Neural Risk Guard]
-    Neural --> Opt[Portfolio Optimizer]
-    Opt --> Trade[Trade Execution]
-    Trade --> Bus
+    Data[Market Verisi] --> Sent[Sentiment Analysis]
+    Sent --> Sig[Signal Engine]
+    Sig --> Risk[Hybrid Risk Guard]
+    Risk --> Opt[Portfolio Optimizer]
+    Opt --> Decision[Standardized Decision]
+    Decision --> Journal[Decision Journaling]
+    Decision --> Bus[Event Bus]
+    Bus --> Exec[Execution Simulation]
+    Exec --> Heart[Heartbeat/Monitoring]
 ```
 
-## 📂 Dosya Yapısı
+## 📂 Teknik Dosya Yapısı
 
-- `src/core/`: EventBus, temel modül sınıfları ve sistem çekirdeği.
-- `src/strategy/`: Risk yönetimi, sinyal üretimi ve portföy optimizasyonu.
-- `tests/`: Sistem güvenilirliğini sağlayan birim testleri.
-- `.github/workflows/`: Otomatik test ve dağıtım süreçleri.
+- `src/core/`: 
+    - `data_models.py`: Pydantic şemaları.
+    - `journal.py`: Karar günlüğü.
+    - `monitoring.py`: Sistem sağlığı (Heartbeat).
+    - `event_bus.py`: Asenkron haberleşme.
+- `src/strategy/`: 
+    - `sentiment_analyzer.py`: Haber duyarlılık motoru.
+    - `risk_manager.py`: Kelly ve volatilite kontrolü.
+    - `neural_risk_guard.py`: Hibrit risk katmanı.
+- `logs/`: Karar kayıtlarının tutulduğu dizin.
 
-## 🚀 Başlangıç
+## 🛠️ Kurulum ve Çalıştırma
 
-### Gereksinimler
-- Python 3.9+
-- `pip install .` (Temel bağımlılıklar için)
-- `pip install ".[test]"` (Testleri çalıştırmak için)
-
-### Çalıştırma
-Sistemi simülasyon modunda başlatmak için:
-```bash
-python3 main.py
-```
-
-### Testleri Çalıştırma
-```bash
-pytest tests/
-```
-
-## ⚠️ Yasal Uyarı
-Bu proje eğitim ve portfolyo amaçlıdır. **YATIRIM TAVSİYESİ DEĞİLDİR.** Finansal piyasalar yüksek risk içerir.
+1. **Bağımlılıklar:** `pip install -r requirements.txt` (Pydantic ve Pytest gereklidir).
+2. **Başlat:** `python3 main.py`
+3. **İzle:** `logs/` klasöründeki JSON dosyalarını inceleyerek sistemin neden karar verdiğini denetleyin.
 
 ---
-*© 2026 Zeren AI - Advanced Agentic Coding Team*
+*© 2026 Zeren AI - Otonom Mühendislik Manifestosu*
