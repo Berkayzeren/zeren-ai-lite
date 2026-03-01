@@ -1,0 +1,40 @@
+{
+  "common": {
+    "welcome": {
+      "tr": "Zeren AI Dashboard'a Hoş Geldiniz",
+      "en": "Welcome to Zeren AI Dashboard"
+    },
+    "status": {
+      "tr": "Durum",
+      "en": "Status"
+    },
+    "actions": {
+      "tr": "İşlemler",
+      "en": "Actions"
+    }
+  },
+  "risk": {
+    "title": {
+      "tr": "Risk Yönetimi",
+      "en": "Risk Management"
+    },
+    "alert_high_volatility": {
+      "tr": "Yüksek volatilite uyarısı!",
+      "en": "High volatility warning!"
+    }
+  },
+  "navigation": {
+    "overview": {
+      "tr": "Genel Bakış",
+      "en": "Overview"
+    },
+    "trading": {
+      "tr": "Ticaret",
+      "en": "Trading"
+    },
+    "settings": {
+      "tr": "Ayarlar",
+      "en": "Settings"
+    }
+  }
+}
