@@ -5,7 +5,7 @@ from src.core.event_bus import EventBus
 
 @pytest.mark.asyncio
 async def test_event_bus_pub_sub():
-    """EventBus üzerinden asenkron yayınlama ve abone olma sürecini test eder."""
+    """Tests the asynchronous publishing and subscription process via EventBus."""
     bus = EventBus()
     received_data = []
 
@@ -14,13 +14,13 @@ async def test_event_bus_pub_sub():
 
     bus.subscribe("TEST_EVENT", mock_callback)
 
-    # Dinleyiciyi arka planda başlat
+    # Start the listener in the background
     listener_task = asyncio.create_task(bus.start_listening())
 
-    # Etkinlik yayınla
+    # Publish an event
     await bus.publish("TEST_EVENT", {"msg": "hello"})
 
-    # İşlenmesi için kısa bir süre bekle
+    # Wait briefly for processing
     await asyncio.sleep(0.1)
 
     assert len(received_data) == 1

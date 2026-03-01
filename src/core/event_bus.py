@@ -8,8 +8,8 @@ logger = logging.getLogger("ZerenAI.Core.EventBus")
 
 class EventBus:
     """
-    Lite Etkinlik Veriyolu (Event Bus).
-    Modüller arası asenkron iletişimi ve 'Loose Coupling' mimarisini sağlar.
+    Lite Event Bus.
+    Provides asynchronous communication and 'Loose Coupling' architecture between modules.
     """
 
     def __init__(self):
@@ -17,17 +17,17 @@ class EventBus:
         self._queue: asyncio.Queue = asyncio.Queue()
 
     def subscribe(self, event_type: str, callback: Callable):
-        """Bir etkinlik tipine abone olur."""
+        """Subscribes to an event type."""
         self._subscribers[event_type].append(callback)
-        logger.info(f"Yeni abone: {event_type} -> {callback.__name__}")
+        logger.info(f"New subscriber: {event_type} -> {callback.__name__}")
 
     async def publish(self, event_type: str, data: Any):
-        """Bir etkinlik yayınlar (kuyruğa ekler)."""
+        """Publishes an event (adds it to the queue)."""
         await self._queue.put((event_type, data))
 
     async def start_listening(self):
-        """Kuyruğu dinlemeye başlar ve aboneleri tetikler."""
-        logger.info("EventBus dinlemeye başladı...")
+        """Starts listening to the queue and triggers subscribers."""
+        logger.info("EventBus started listening...")
         while True:
             event_type, data = await self._queue.get()
             if event_type in self._subscribers:

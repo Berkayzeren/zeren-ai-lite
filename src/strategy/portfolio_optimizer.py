@@ -7,56 +7,57 @@ logger = logging.getLogger("ZerenAI.Strategy.PortfolioOptimizer")
 
 class PortfolioOptimizer:
     """
-    Lite Portföy Optimizatörü.
-    Korelasyon analizi ve sektör bazlı çeşitlendirme simülasyonu yapar.
+    Lite Portfolio Optimizer.
+    Simulates correlation analysis and sector-based diversification.
     """
 
     def __init__(self):
-        # Örnek sektör eşleştirmeleri
+        # Example sector mappings
         self.sectors = {
-            "THYAO.IS": "Ulaşım",
-            "PGSUS.IS": "Ulaşım",
-            "AKBNK.IS": "Bankacılık",
-            "EREGL.IS": "Demir-Çelik",
-            "BTCUSDT": "Kripto",
+            "THYAO.IS": "Transportation",
+            "PGSUS.IS": "Transportation",
+            "AKBNK.IS": "Banking",
+            "EREGL.IS": "Steel",
+            "BTCUSDT": "Crypto",
+            "ETHUSDT": "Crypto",
         }
 
     def optimize_allocation(
         self, current_portfolio: Dict[str, float], new_signal: Dict[str, Any]
     ) -> float:
         """
-        Yeni bir sinyal için optimal ağırlığı hesaplar.
-        Sektör yoğunlaşması kontrolü içerir.
+        Calculates optimal weight for a new signal.
+        Includes sector concentration checks.
         """
         ticker = new_signal.get("ticker")
-        sector = self.sectors.get(ticker, "Diğer")
+        sector = self.sectors.get(ticker, "Other")
 
-        # Sektör yoğunlaşması kontrolü
+        # Sector concentration check
         sector_usage = sum(
             val for t, val in current_portfolio.items() if self.sectors.get(t) == sector
         )
 
-        # Eğer sektör ağırlığı %30'u geçiyorsa yeni alımı kısıtla
+        # Limit if sector weight exceeds 30%
         max_sector_weight = 0.30
         if sector_usage >= max_sector_weight:
             logger.warning(
-                f"⚠️ SEKTÖR YOĞUNLAŞMA RİSKİ: {sector} sektörü zaten %{sector_usage * 100} ağırlığında."
+                f"⚠️ SECTOR CONCENTRATION RISK: {sector} sector is already at {sector_usage * 100:.1f}% capacity."
             )
             return 0.0
 
-        # Temel optimizasyon (Lite sürüm için basitleştirilmiş)
-        base_weight = 0.05  # Standart %5
+        # Basic optimization (Simplified for Lite version)
+        base_weight = 0.05  # Standard 5%
         confidence = new_signal.get("confidence", 0.5)
 
         optimized_weight = base_weight * (confidence * 2)
         return round(min(optimized_weight, max_sector_weight - sector_usage), 4)
 
     def calculate_portfolio_health(self, portfolio: Dict[str, float]) -> Dict[str, Any]:
-        """Portföyün genel sağlık ve çeşitlendirme durumunu analiz eder."""
+        """Analyzes overall portfolio health and diversification."""
         return {
             "total_exposure": sum(portfolio.values()),
             "composition": {
-                self.sectors.get(t, "Diğer"): sum(
+                self.sectors.get(t, "Other"): sum(
                     v
                     for k, v in portfolio.items()
                     if self.sectors.get(k) == self.sectors.get(t)

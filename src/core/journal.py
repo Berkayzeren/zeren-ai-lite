@@ -9,8 +9,8 @@ logger = logging.getLogger("ZerenAI.Core.Journal")
 
 class Journal:
     """
-    Zeren AI İşlem ve Karar Günlüğü.
-    Tüm kararları (Onay/Red) kalıcı olarak JSON formatında saklar.
+    Zeren AI Trade and Decision Journal.
+    Permanently stores all decisions (Approve/Reject) in JSON format.
     """
 
     def __init__(self, log_dir: str = "logs"):
@@ -18,15 +18,15 @@ class Journal:
         if not os.path.exists(self.log_dir):
             os.makedirs(self.log_dir)
 
-        # Günlük dosya adı (journal_2026-03-01.json)
+        # Journal filename (journal_2026-03-01.json)
         self.current_file = os.path.join(
             self.log_dir, f"journal_{datetime.now().strftime('%Y-%m-%d')}.json"
         )
 
     def log_decision(self, decision_data: Dict[str, Any]):
-        """Bir kararı günlüğe kaydeder."""
+        """Logs a decision to the journal."""
         try:
-            # Mevcut veriyi oku veya yeni liste oluştur
+            # Read existing data or create a new list
             records = []
             if os.path.exists(self.current_file):
                 with open(self.current_file, "r") as f:
@@ -35,16 +35,16 @@ class Journal:
                     except json.JSONDecodeError:
                         records = []
 
-            # Yeni kaydı ekle
+            # Append new record
             records.append({"ts": datetime.now().isoformat(), "data": decision_data})
 
-            # Yaz
+            # Save
             with open(self.current_file, "w") as f:
                 json.dump(records, f, indent=2, default=str)
 
             logger.info(
-                f"Karar günlüğe kaydedildi: {decision_data.get('ticker')} - {decision_data.get('decision')}"
+                f"Decision logged: {decision_data.get('ticker')} - {decision_data.get('decision')}"
             )
 
         except Exception as e:
-            logger.error(f"Günlük yazma hatası: {e}")
+            logger.error(f"Journal write error: {e}")

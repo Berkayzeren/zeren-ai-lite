@@ -8,8 +8,8 @@ logger = logging.getLogger("ZerenAI.Strategy.SignalGenerator")
 
 class SignalGenerator:
     """
-    Lite Sinyal Üretim Merkezi.
-    Teknik analiz indikatörleri ve strateji mantığını simüle eder.
+    Lite Signal Generation Center.
+    Simulates technical analysis indicators and strategy logic.
     """
 
     def __init__(self):
@@ -19,39 +19,39 @@ class SignalGenerator:
         self, ticker: str, data: Dict[str, Any]
     ) -> Dict[str, Any]:
         """
-        Gelen verileri analiz ederek AL/SAT sinyalleri üretir.
-        Lite versiyon: İstatistiksel olasılık ve temel trend takibi simülasyonu.
+        Analyzes incoming data to produce BUY/SELL signals.
+        Lite version: Statistical probability and basic trend-following simulation.
         """
         now = datetime.now()
 
-        # Simüle edilmiş indikatör hesaplamaları
+        # Simulated indicator calculations
         rsi = data.get("rsi", 50)
         macd_trend = data.get("macd_trend", "neutral")
 
         signals = {}
 
-        # 1. SCALPING SİNYALİ (Kısa Vade)
+        # 1. SCALPING SIGNAL (Short Term)
         if rsi < 30:
             signals["scalp"] = {
                 "signal": "BUY",
                 "confidence": 0.85,
-                "action": "Aşırı satım bölgesinden dönüş bekleniyor.",
+                "action": "Recovery expected from oversold levels.",
                 "expiry": (now + timedelta(hours=1)).strftime("%H:%M"),
             }
         elif rsi > 70:
             signals["scalp"] = {
                 "signal": "SELL",
                 "confidence": 0.82,
-                "action": "Aşırı alım bölgesinde kar satışı riski.",
+                "action": "Potential profit-taking from overbought levels.",
                 "expiry": (now + timedelta(hours=1)).strftime("%H:%M"),
             }
 
-        # 2. SWING SİNYALİ (Orta Vade)
+        # 2. SWING SIGNAL (Medium Term)
         if macd_trend == "bullish":
             signals["swing"] = {
                 "signal": "BUY",
                 "confidence": 0.75,
-                "action": "MACD Pozitif kesişim onayı.",
+                "action": "MACD positive crossover confirmation.",
                 "valid_days": 3,
             }
 
@@ -63,10 +63,10 @@ class SignalGenerator:
         }
 
     def format_signal_report(self, signals: Dict[str, Any]) -> str:
-        """Sinyalleri okunabilir bir rapor haline getirir."""
-        output = f"\n--- {signals['ticker']} Sinyal Raporu ---\n"
+        """Formats signals into a readable report."""
+        output = f"\n--- {signals['ticker']} Signal Report ---\n"
         for strategy, details in signals["signals"].items():
             icon = "🟢" if details["signal"] == "BUY" else "🔴"
-            output += f"{icon} {strategy.upper()}: {details['signal']} | Güven: %{int(details['confidence'] * 100)}\n"
-            output += f"   Not: {details['action']}\n"
+            output += f"{icon} {strategy.upper()}: {details['signal']} | Confidence: {int(details['confidence'] * 100)}%\n"
+            output += f"   Note: {details['action']}\n"
         return output

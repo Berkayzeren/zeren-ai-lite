@@ -5,12 +5,12 @@ from pydantic import BaseModel, Field
 
 class SignalData(BaseModel):
     """
-    Sinyal Veri Modeli.
-    Strateji modüllerinden çıkan ham sinyal verilerini standardize eder.
+    Signal Data Model.
+    Standardizes raw signal data from strategy modules.
     """
 
     ticker: str
-    action: str = Field(..., description="BUY, SELL veya HOLD")
+    action: str = Field(..., description="BUY, SELL, or HOLD")
     confidence: float = Field(..., ge=0.0, le=1.0)
     price: Optional[float] = None
     timestamp: datetime = Field(default_factory=datetime.now)
@@ -20,8 +20,8 @@ class SignalData(BaseModel):
 
 class RiskReport(BaseModel):
     """
-    Risk Değerlendirme Modeli.
-    RiskManager ve NeuralGuard çıktılarını birleştirir.
+    Risk Assessment Model.
+    Combines outputs from RiskManager and NeuralGuard.
     """
 
     is_valid: bool
@@ -34,8 +34,8 @@ class RiskReport(BaseModel):
 
 class TradeDecision(BaseModel):
     """
-    Final Karar Modeli.
-    Sinyal, Risk ve Optimizasyon katmanlarından geçen nihai kararı temsil eder.
+    Final Decision Model.
+    Represents the ultimate decision after passing through Signal, Risk, and Optimization layers.
     """
 
     ticker: str
